@@ -30,7 +30,19 @@ formDiv.addEventListener('submit',(e) => {
     let book = new Book(nameInput.value, authorInput.value, pageInput.value)
     
     addBookToLibrary(book)
+
 })
+
+document.body.addEventListener('click',(e) => {
+
+    if(e.target.getAttribute('data-id')) {
+        const index = parseInt(e.target.getAttribute('data-id'))
+        library.splice(index,1)
+
+        displayLibrary()
+    }
+})
+    
 
 
 
@@ -38,25 +50,26 @@ function Book(name, author, pages) {
     this.name = name
     this.author = author
     this.pages = pages
-
 }
 
 function addBookToLibrary(bookObj) {
     library.push(bookObj)
-    addBookInDisplay(bookObj)
+    addBookInDisplay(bookObj,library.indexOf(bookObj))
     emptyInputs()
 }
 
 function displayLibrary() {
-
-    library.forEach((book) => {
+    refreshDisplay()
+    library.forEach((book,index) => {
         
-        addBookInDisplay(book)
+        addBookInDisplay(book,index)
          
     })
 }
-function addBookInDisplay(book) {
+function addBookInDisplay(book,index) {
         let bookDiv = document.createElement('div')
+        bookDiv.className='book'
+
         let nameDiv = document.createElement('div')
         let authorDiv = document.createElement('div')
         let pageDiv = document.createElement('div')
@@ -65,7 +78,9 @@ function addBookInDisplay(book) {
         nameDiv.innerText = book.name
         authorDiv.innerText = book.author
         pageDiv.innerText = book.pages
+        
         removeBtn.innerText = 'Delete'
+        removeBtn.setAttribute('data-id',index)
 
         bookDiv.appendChild(nameDiv)
         bookDiv.appendChild(authorDiv)
@@ -81,4 +96,10 @@ function emptyInputs() {
     nameInput.value = ''
     authorInput.value = ''
     pageInput.value = ''
+}
+
+function refreshDisplay() {
+    while(libraryDiv.firstChild) {
+        libraryDiv.removeChild(libraryDiv.firstChild)
+    }
 }
