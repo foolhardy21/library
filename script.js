@@ -50,12 +50,11 @@ libraryDiv.addEventListener('click',(e) => {
     } else if( e.target.innerText == 'Change' ) {
         
         const index = parseInt(e.target.getAttribute('data-id'))
+        
         let book = new Book(library[index].name,library[index].author,library[index].pages,library[index].isRead)
-        
-        // this book object can access printInfo 
-        
         book.changeRead()
         library[index].isRead = book.isRead
+        
         writeToStorage()
         displayLibrary()
     }
@@ -67,15 +66,15 @@ function Book(name, author, pages, isRead = false) {
     this.pages = pages
     this.isRead = isRead
 
-    // this.printInfo = function() {
-    //     return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
-    // }
+    this.printInfo = function() {
+        return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
+    }
 }
 
-Book.prototype.printInfo = function() {
-        return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
+// Book.prototype.printInfo = function() {
+//         return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
     
-}
+// }
 Book.prototype.changeRead = function() {
     this.isRead = !this.isRead
     
@@ -117,7 +116,7 @@ function addBookInDisplay(book,index) {
         bookDiv.className='book'
         
         let bookObj = new Book(book.name,book.author,book.pages,book.isRead)
-        console.log(bookObj)                        //printInfo can be seen inside __proto__ 
+        // console.log(bookObj)                        //printInfo can be seen inside __proto__ 
         
         bookDiv.innerText = bookObj.printInfo()   //this part is not working
 
