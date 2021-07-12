@@ -3,6 +3,7 @@ let formDiv = document.querySelector('form')
 let nameInput = document.querySelector('input[name="name"]')
 let authorInput = document.querySelector('input[name="author"]')
 let pageInput = document.querySelector('input[name="pages"]')
+let localStorage = window.localStorage
 
 let library = [
     {
@@ -25,6 +26,7 @@ let library = [
     }
 ]
 
+getLibrary()
 displayLibrary()
 
 formDiv.addEventListener('submit',(e) => {
@@ -41,7 +43,7 @@ libraryDiv.addEventListener('click',(e) => {
     if( e.target.innerText == 'Delete' ) {
         const index = parseInt(e.target.getAttribute('data-id'))
         library.splice(index,1)
-
+        localStorage.setItem('library',JSON.stringify(library))
         displayLibrary()
     } else if( e.target.innerText == 'Change' ) {
         
@@ -49,13 +51,11 @@ libraryDiv.addEventListener('click',(e) => {
         let book = new Book(library[index].name,library[index].author,library[index].pages,library[index].isRead)
         book.changeRead()
         library[index].isRead = book.isRead
+        localStorage.setItem('library',JSON.stringify(library))
         displayLibrary()
     }
 })
     
-
-
-
 function Book(name, author, pages, isRead = false) {
     this.name = name
     this.author = author
@@ -68,9 +68,21 @@ Book.prototype.changeRead = function() {
 }
 
 function addBookToLibrary(bookObj) {
+    getLibrary()
     library.push(bookObj)
+    localStorage.setItem('library',JSON.stringify(library))
     addBookInDisplay(bookObj,library.indexOf(bookObj))
     emptyInputs()
+}
+
+function getLibrary() {
+    const storageLibrary = JSON.parse(localStorage.getItem('library')) 
+    
+    if( storageLibrary && storageLibrary.length > 0 ) {
+        library =  storageLibrary                       
+    } else {
+        localStorage.setItem('library',JSON.stringify(library))    
+    }
 }
 
 function displayLibrary() {
@@ -80,6 +92,11 @@ function displayLibrary() {
         addBookInDisplay(book,index)
          
     })
+}
+function refreshDisplay() {
+    while(libraryDiv.firstChild) {
+        libraryDiv.removeChild(libraryDiv.firstChild)
+    }
 }
 function addBookInDisplay(book,index) {
         let bookDiv = document.createElement('div')
@@ -118,10 +135,4 @@ function emptyInputs() {
     nameInput.value = ''
     authorInput.value = ''
     pageInput.value = ''
-}
-
-function refreshDisplay() {
-    while(libraryDiv.firstChild) {
-        libraryDiv.removeChild(libraryDiv.firstChild)
-    }
 }
