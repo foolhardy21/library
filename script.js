@@ -1,11 +1,25 @@
+function Book(name, author, pages, isRead = false) {
+    this.name = name
+    this.author = author
+    this.pages = pages
+    this.isRead = isRead
+
+}
+Book.prototype.printInfo = function() {
+        return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
+    
+}
+Book.prototype.changeRead = function() {
+    this.isRead = !this.isRead
+ 
+}
+
 let libraryDiv = document.querySelector('.lib')
 let formDiv = document.querySelector('form')
 let nameInput = document.querySelector('input[name="name"]')
 let authorInput = document.querySelector('input[name="author"]')
 let pageInput = document.querySelector('input[name="pages"]')
 let localStorage = window.localStorage
-
-//doubt at lines 55, 120, 122
 
 let library = [
     {
@@ -45,8 +59,7 @@ libraryDiv.addEventListener('click',(e) => {
     if( e.target.innerText == 'Delete' ) {
         const index = parseInt(e.target.getAttribute('data-id'))
         library.splice(index,1)
-        writeToStorage()
-        displayLibrary()
+        
     } else if( e.target.innerText == 'Change' ) {
         
         const index = parseInt(e.target.getAttribute('data-id'))
@@ -55,33 +68,15 @@ libraryDiv.addEventListener('click',(e) => {
         book.changeRead()
         library[index].isRead = book.isRead
         
-        writeToStorage()
-        displayLibrary()
     }
+    writeToStorage()
+    displayLibrary()
+
 })
     
-function Book(name, author, pages, isRead = false) {
-    this.name = name
-    this.author = author
-    this.pages = pages
-    this.isRead = isRead
-
-    this.printInfo = function() {
-        return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
-    }
-}
-
-// Book.prototype.printInfo = function() {
-//         return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
-    
-// }
-Book.prototype.changeRead = function() {
-    this.isRead = !this.isRead
-    
-}
 
 function addBookToLibrary(bookObj) {
-    getLibrary()
+    
     library.push(bookObj)
     writeToStorage()
     addBookInDisplay(bookObj,library.indexOf(bookObj))
@@ -116,9 +111,8 @@ function addBookInDisplay(book,index) {
         bookDiv.className='book'
         
         let bookObj = new Book(book.name,book.author,book.pages,book.isRead)
-        // console.log(bookObj)                        //printInfo can be seen inside __proto__ 
         
-        bookDiv.innerText = bookObj.printInfo()   //this part is not working
+        bookDiv.innerText = bookObj.printInfo()
 
         let removeBtn = document.createElement('button')
         let readStatusBtn = document.createElement('button')
@@ -126,6 +120,7 @@ function addBookInDisplay(book,index) {
         
         removeBtn.innerText = 'Delete'
         removeBtn.setAttribute('data-id',index)
+        
         readStatusBtn.innerText = 'Change'
         readStatusBtn.setAttribute('data-id',index) 
 
