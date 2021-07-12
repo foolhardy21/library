@@ -43,7 +43,7 @@ libraryDiv.addEventListener('click',(e) => {
     if( e.target.innerText == 'Delete' ) {
         const index = parseInt(e.target.getAttribute('data-id'))
         library.splice(index,1)
-        localStorage.setItem('library',JSON.stringify(library))
+        writeToStorage()
         displayLibrary()
     } else if( e.target.innerText == 'Change' ) {
         
@@ -51,7 +51,7 @@ libraryDiv.addEventListener('click',(e) => {
         let book = new Book(library[index].name,library[index].author,library[index].pages,library[index].isRead)
         book.changeRead()
         library[index].isRead = book.isRead
-        localStorage.setItem('library',JSON.stringify(library))
+        writeToStorage()
         displayLibrary()
     }
 })
@@ -70,7 +70,7 @@ Book.prototype.changeRead = function() {
 function addBookToLibrary(bookObj) {
     getLibrary()
     library.push(bookObj)
-    localStorage.setItem('library',JSON.stringify(library))
+    writeToStorage()
     addBookInDisplay(bookObj,library.indexOf(bookObj))
     emptyInputs()
 }
@@ -81,7 +81,7 @@ function getLibrary() {
     if( storageLibrary && storageLibrary.length > 0 ) {
         library =  storageLibrary                       
     } else {
-        localStorage.setItem('library',JSON.stringify(library))    
+        writeToStorage()    
     }
 }
 
@@ -135,4 +135,8 @@ function emptyInputs() {
     nameInput.value = ''
     authorInput.value = ''
     pageInput.value = ''
+}
+
+function writeToStorage() {
+    localStorage.setItem('library',JSON.stringify(library))
 }
