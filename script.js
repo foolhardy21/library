@@ -119,7 +119,7 @@ function addBookInDisplay(book,index) {
         let bookObj = new Book(book.name,book.author,book.pages,book.isRead)
         console.log(bookObj)                        //printInfo can be seen inside __proto__ 
         
-        bookDiv.innerText = 'bookObj.printInfo()'   //this part is not working
+        bookDiv.innerText = bookObj.printInfo()   //this part is not working
 
         let removeBtn = document.createElement('button')
         let readStatusBtn = document.createElement('button')
