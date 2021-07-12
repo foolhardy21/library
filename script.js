@@ -5,6 +5,8 @@ let authorInput = document.querySelector('input[name="author"]')
 let pageInput = document.querySelector('input[name="pages"]')
 let localStorage = window.localStorage
 
+//doubt at lines 55, 120, 122
+
 let library = [
     {
         name: 'Meluha',
@@ -49,6 +51,9 @@ libraryDiv.addEventListener('click',(e) => {
         
         const index = parseInt(e.target.getAttribute('data-id'))
         let book = new Book(library[index].name,library[index].author,library[index].pages,library[index].isRead)
+        
+        // this book object can access printInfo 
+        
         book.changeRead()
         library[index].isRead = book.isRead
         writeToStorage()
@@ -61,6 +66,15 @@ function Book(name, author, pages, isRead = false) {
     this.author = author
     this.pages = pages
     this.isRead = isRead
+
+    // this.printInfo = function() {
+    //     return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
+    // }
+}
+
+Book.prototype.printInfo = function() {
+        return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
+    
 }
 Book.prototype.changeRead = function() {
     this.isRead = !this.isRead
@@ -87,8 +101,8 @@ function getLibrary() {
 
 function displayLibrary() {
     refreshDisplay()
+    
     library.forEach((book,index) => {
-        
         addBookInDisplay(book,index)
          
     })
@@ -101,28 +115,21 @@ function refreshDisplay() {
 function addBookInDisplay(book,index) {
         let bookDiv = document.createElement('div')
         bookDiv.className='book'
+        
+        let bookObj = new Book(book.name,book.author,book.pages,book.isRead)
+        console.log(bookObj)                        //printInfo can be seen inside __proto__ 
+        
+        bookDiv.innerText = 'bookObj.printInfo()'   //this part is not working
 
-        let nameDiv = document.createElement('div')
-        let authorDiv = document.createElement('div')
-        let pageDiv = document.createElement('div')
-        let readDiv = document.createElement('div')
         let removeBtn = document.createElement('button')
         let readStatusBtn = document.createElement('button')
 
-        nameDiv.innerText = book.name
-        authorDiv.innerText = `Written By: ${book.author}`
-        pageDiv.innerText = `No of Pages: ${book.pages}`
-        readDiv.innerText = ` ${book.isRead ? 'Read' : 'Not Read yet'} `
         
         removeBtn.innerText = 'Delete'
         removeBtn.setAttribute('data-id',index)
         readStatusBtn.innerText = 'Change'
         readStatusBtn.setAttribute('data-id',index) 
 
-        bookDiv.appendChild(nameDiv)
-        bookDiv.appendChild(authorDiv)
-        bookDiv.appendChild(pageDiv)
-        bookDiv.appendChild(readDiv)
         bookDiv.appendChild(removeBtn)
         bookDiv.appendChild(readStatusBtn)
         bookDiv.appendChild(document.createElement('hr'))
