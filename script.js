@@ -1,18 +1,21 @@
-function Book(name, author, pages, isRead = false) {
-    this.name = name
-    this.author = author
-    this.pages = pages
-    this.isRead = isRead
+class Book {
+    constructor(name, author, pages, isRead = false) {
+        this.name = name
+        this.author = author
+        this.pages = pages
+        this.isRead = isRead
+    }
+    printInfo() {
+        return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ?
+                'Read' : 'Not Read yet'}\n\n`
+
+    }
+    changeRead() {
+        this.isRead = !this.isRead
+    }
 
 }
-Book.prototype.printInfo = function() {
-        return `${this.name} by ${this.author}, ${this.pages}, ${this.isRead ? 'Read' : 'Not Read yet'}\n\n`
-    
-}
-Book.prototype.changeRead = function() {
-    this.isRead = !this.isRead
- 
-}
+
 let libraryDiv = document.querySelector('.lib')
 let formDiv = document.querySelector('form')
 let nameInput = document.querySelector('input[name="name"]')
