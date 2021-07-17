@@ -13,7 +13,6 @@ Book.prototype.changeRead = function() {
     this.isRead = !this.isRead
  
 }
-
 let libraryDiv = document.querySelector('.lib')
 let formDiv = document.querySelector('form')
 let nameInput = document.querySelector('input[name="name"]')
